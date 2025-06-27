@@ -1,9 +1,40 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { loginUsuario } from '../API/usuarios';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Completa todos los campos');
+      return;
+    }
+    const { data, error } = await loginUsuario(email, password);
+    if (error || !data) {
+      Alert.alert('Error', 'Correo o contraseña incorrectos');
+    } else {
+      Alert.alert('Éxito', `Bienvenido, ${data.nom_usu}`);
+      // navega segun el rol del usuario
+      switch (data.rol_usu) {
+        case 'feligres':
+          navigation.navigate('Feligres');
+          break;
+        case 'tesorero':
+          navigation.navigate('Tesorero');
+          break;
+        case 'pastor':
+          navigation.navigate('Pastor');
+          break;
+        case 'admin':
+          navigation.navigate('Admin');
+          break;
+        default:
+          Alert.alert('Error', 'Rol de usuario desconocido');
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -23,7 +54,7 @@ export default function LoginScreen({ navigation }) {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Ingresar</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
@@ -32,6 +63,8 @@ export default function LoginScreen({ navigation }) {
     </View>
   );
 }
+
+// ...styles igual que antes
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', padding: 20 },

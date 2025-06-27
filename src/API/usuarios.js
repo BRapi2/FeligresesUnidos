@@ -27,3 +27,15 @@ export async function registrarUsuario(usuario) {
   }
 }
 
+export async function loginUsuario(email, password) {
+  // Busca el usuario por email y contraseña (texto plano, solo para pruebas)
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('*')
+    .eq('email_usu', email)
+    .eq('contra_hash_usu', password)
+    .single();
+
+  return { data, error };
+}
+
