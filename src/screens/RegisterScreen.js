@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import { registrarUsuario } from 'src/API/usuarios';
+import { registrarUsuario } from '../API/JS_usuarios';
 
 export default function RegisterScreen({ navigation }) {
   const [dni, setDni] = useState('');
@@ -41,7 +41,7 @@ export default function RegisterScreen({ navigation }) {
       CONTRA_HASH_USU: password, // En producción, hashea la contraseña
       IGLESIAS_LOCALES_ID: iglesiaId || null,
       ROL_USU: rol,
-      CREA_USU: null,
+      CREA_USU: new Date().toISOString(),
     };
 
     const { error } = await registrarUsuario(usuario);
