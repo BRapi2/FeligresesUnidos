@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import { registrarUsuario } from '../API/usuarios';
+import { registrarUsuario } from '../API/usuarios'; //NO TOCAR DEJALO ASI
 
 export default function RegisterScreen({ navigation }) {
   const [dni, setDni] = useState('');
@@ -28,20 +28,19 @@ export default function RegisterScreen({ navigation }) {
       return;
     }
     // Generar ID_USU automático
-    const ID_USU = (rol[0].toUpperCase() || 'F') + Math.floor(100000 + Math.random() * 900000);
+    //const ID_USU = (rol[0].toUpperCase() || 'F') + Math.floor(100000 + Math.random() * 900000);
 
     const usuario = {
-      ID_USU,
-      DNI_USU: dni,
-      NOM_USU: nombre,
-      APE_USU: apellido,
-      TEL_USU: telefono,
-      EMAIL_USU: email,
-      EMAIL_PRINCIPAL_USU: emailPrincipal || email,
-      CONTRA_HASH_USU: password, // En producción, hashea la contraseña
-      IGLESIAS_LOCALES_ID: iglesiaId || null,
-      ROL_USU: rol,
-      CREA_USU: new Date().toISOString(),
+      dni_usu: dni,
+      nom_usu: nombre,
+      ape_usu: apellido,
+      tel_usu: telefono,
+      email_usu: email,
+      email_principal_usu: emailPrincipal || email,
+      contra_hash_usu: password, // En producción, hashea la contraseña
+      iglesias_locales_id: iglesiaId || null,
+      rol_usu: rol,
+      crea_usu: null,
     };
 
     const { error } = await registrarUsuario(usuario);

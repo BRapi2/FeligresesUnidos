@@ -2,13 +2,21 @@ import { supabase } from './supabaseClient';
 
 export async function registrarUsuario(usuario) {
   try {
+    console.log('Usuario a registrar:', usuario);
+
     const { data, error } = await supabase
-      .from('USUARIOS')
+      .from('usuarios')
       .insert([usuario])
       .select();
 
+    console.log('Respuesta Supabase:', { data, error });
+
+    if (error && error.message) {
+      console.error('⚠️ Error al insertar en Supabase:', error.message);
+      throw error;
+    }
     if (error) {
-      console.error('⚠️ Error al insertar en Supabase:', error);
+      console.error('⚠️ Error al insertar en Supabase:', JSON.stringify(error, null, 2));
       throw error;
     }
 
@@ -18,3 +26,4 @@ export async function registrarUsuario(usuario) {
     return { data: null, error };
   }
 }
+
