@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import { registrarUsuario } from '../API/JS_usuarios';
+import { registrarUsuario } from '../api/usuarios';
 
 export default function RegisterScreen({ navigation }) {
   const [dni, setDni] = useState('');
