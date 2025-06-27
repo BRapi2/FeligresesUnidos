@@ -1,10 +1,36 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { registrarUsuario } from '../api/usuarios'; // Asegúrate de tener esta función
 
 export default function RegisterScreen({ navigation }) {
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleRegister = async () => {
+    // Aquí debes adaptar los campos a los de tu tabla USUARIOS
+    const usuario = {
+      ID_USU: 'F' + Math.floor(100000 + Math.random() * 900000), // Ejemplo de ID
+      DNI_USU: '12345678', // Debes pedir este dato en el formulario real
+      NOM_USU: nombre,
+      APE_USU: '', // Agrega campo en el formulario si lo necesitas
+      TEL_USU: '', // Agrega campo en el formulario si lo necesitas
+      EMAIL_USU: email,
+      EMAIL_PRINCIPAL_USU: email,
+      CONTRA_HASH_USU: password, // Idealmente deberías hashear la contraseña
+      IGLESIAS_LOCALES_ID: null,
+      ROL_USU: 'feligres',
+      CREA_USU: null,
+    };
+
+    const { error } = await registrarUsuario(usuario);
+    if (error) {
+      Alert.alert('Error', error.message);
+    } else {
+      Alert.alert('Éxito', 'Usuario registrado');
+      navigation.navigate('Login');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -30,7 +56,7 @@ export default function RegisterScreen({ navigation }) {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
