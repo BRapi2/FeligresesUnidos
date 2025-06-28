@@ -28,7 +28,7 @@ export default function LoginScreen({ navigation }) {
           navigation.navigate('Pastor');
           break;
         case 'admin':
-          navigation.navigate('Admin');
+          navigation.navigate('Admin',{id_usu: data.id_usu});
           break;
         default:
           Alert.alert('Error', 'Rol de usuario desconocido');

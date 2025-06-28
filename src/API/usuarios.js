@@ -39,3 +39,11 @@ export async function loginUsuario(email, password) {
   return { data, error };
 }
 
+export async function crearUsuario(usuario) {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .insert([usuario])
+    .select();
+  return { data, error };
+}
+
