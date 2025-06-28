@@ -19,7 +19,7 @@ export default function LoginScreen({ navigation }) {
       // navega segun el rol del usuario
       switch (data.rol_usu) {
         case 'feligres':
-          navigation.navigate('Feligres');
+          navigation.navigate('Feligres', { id_usu: data.id_usu });
           break;
         case 'tesorero':
           navigation.navigate('Tesorero');
