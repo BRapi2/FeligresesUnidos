@@ -12,9 +12,11 @@ export default function LoginScreen({ navigation }) {
       return;
     }
     const { data, error } = await loginUsuario(email, password);
-    if (error || !data) {
-      Alert.alert('Error', 'Correo o contraseña incorrectos');
-    } else {
+    if (error === 'Cuenta desactivada') {
+    Alert.alert('Cuenta desactivada', 'Tu cuenta ha sido desactivada. Contacta al administrador.');
+  } else if (error) {
+    Alert.alert('Error', 'Correo o contraseña incorrectos');
+  } else {
       Alert.alert('Éxito', `Bienvenido, ${data.nom_usu}`);
       // navega segun el rol del usuario
       switch (data.rol_usu) {

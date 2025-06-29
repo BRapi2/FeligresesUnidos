@@ -33,10 +33,14 @@ export async function loginUsuario(email, password) {
     .from('usuarios')
     .select('*')
     .eq('email_usu', email)
-    .eq('contra_hash_usu', password)
-    .eq('activo_usu', true) // Asegurarse de que el usuario esté activo
+    .eq('contra_hash_usu', password) 
     .single();
-
+    if (error || !data) {
+    return { data: null, error: 'Credenciales incorrectas' };
+  }
+  if (!data.activo_usu) {
+    return { data: null, error: 'Cuenta desactivada' };
+  }
   return { data, error };
 }
 
