@@ -34,6 +34,7 @@ export async function loginUsuario(email, password) {
     .select('*')
     .eq('email_usu', email)
     .eq('contra_hash_usu', password)
+    .eq('activo_usu', true) // Asegurarse de que el usuario esté activo
     .single();
 
   return { data, error };
@@ -47,3 +48,27 @@ export async function crearUsuario(usuario) {
   return { data, error };
 }
 
+export async function obtenerUsuarios() {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('id_usu, nom_usu, ape_usu');
+  return { data, error };
+}
+
+export async function eliminarUsuario(id_usu) {
+  const { error } = await supabase
+    .from('usuarios')
+    .delete()
+    .eq('id_usu', id_usu);
+    if (error) console.error('Error al eliminar usuario:', error);
+  return { error };
+}
+
+export async function DesactivarUsuario(id_usu) {
+  const { error } = await supabase
+    .from('usuarios')
+    .update({activo_usu: false})
+    .eq('id_usu', id_usu);
+    if (error) console.error('Error al desactivar usuario:', error);
+  return { error };
+}

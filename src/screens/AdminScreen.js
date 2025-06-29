@@ -4,7 +4,7 @@ import { crearUsuario } from '../API/usuarios';
 import { obtenerIglesias } from '../API/iglesias';
 import { Picker } from '@react-native-picker/picker';
 
-export default function AdminScreen({route}) {
+export default function AdminScreen({route, navigation}) {
   const idAdmin = route?.params?.id_usu;
   const [modalVisible, setModalVisible] = useState(false);
   const [nombre, setNombre] = useState('');
@@ -91,8 +91,8 @@ export default function AdminScreen({route}) {
       <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
         <Text style={styles.buttonText}>Crear Usuario</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Bloquear Usuario</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DesactivarUsuario')}>
+        <Text style={styles.buttonText}>Desactivar Usuario</Text>
       </TouchableOpacity>
 
       {/* Modal para crear usuario */}

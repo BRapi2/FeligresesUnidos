@@ -8,6 +8,8 @@ import PastorScreen from '../screens/PastorScreen';
 import TesoreroScreen from '../screens/TesoreroScreen';
 import FeligresScreen from '../screens/FeligresScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import EliminarUsuarioScreen from '../screens/DesactivarUsuarioScreen';
+import DesactivarUsuarioScreen from '../screens/DesactivarUsuarioScreen';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +24,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Tesorero" component={TesoreroScreen} />
         <Stack.Screen name="Feligres" component={FeligresScreen} />
         <Stack.Screen name="Perfil" component={ProfileScreen} />
+        <Stack.Screen name="DesactivarUsuario" component={DesactivarUsuarioScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
