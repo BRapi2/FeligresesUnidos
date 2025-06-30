@@ -1,9 +1,8 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, Modal } from 'react-native';
 import { guardarTarjeta } from '../API/tarjetas';
+import { obtenerUltimasTransacciones } from '../API/transacciones';
 import { Picker } from '@react-native-picker/picker';
-
 
 export default function FeligresScreen({ route, navigation }) {
   React.useEffect(() => {
@@ -17,9 +16,16 @@ export default function FeligresScreen({ route, navigation }) {
   const [fecha, setFecha] = useState('');
   const [marca, setMarca] = useState('Visa');
   const [modalVisible, setModalVisible] = useState(false);
+  const [transacciones, setTransacciones] = useState([]);
+
+  // Obtener las últimas 5 transacciones al cargar
+  useEffect(() => {
+    if (usuario_id) {
+      obtenerUltimasTransacciones(usuario_id).then(({ data }) => setTransacciones(data || []));
+    }
+  }, [usuario_id]);
 
   const handleGuardar = async () => {
-    // Verifica que usuario_id exista y sea válido
     if (!usuario_id) {
       console.error('usuario_id no recibido:', usuario_id);
       Alert.alert('Error', 'No se encontró el usuario. Vuelve a iniciar sesión.');
@@ -31,8 +37,6 @@ export default function FeligresScreen({ route, navigation }) {
     }
     const ultimos4 = numero.slice(-4);
     const numero_encriptado = numero; // En producción, cifra este valor
-
-    console.log('usuario_id usado para guardar tarjeta:', usuario_id);
 
     const { error } = await guardarTarjeta({
       usuario_id,
@@ -59,12 +63,36 @@ export default function FeligresScreen({ route, navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Panel del Feligres</Text>
+      
+      {/* Sección de transacciones */}
       <View style={styles.section}>
-        <Text style={styles.subtitle}>Mis Transacciones</Text>
-        <Text>- Donación: $100</Text>
-        <Text>- Diezmo: $50</Text>
-        <Text>- Ofrenda: $30</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Text style={styles.subtitle}>Mis Transacciones</Text>
+          <TouchableOpacity
+            style={styles.smallButton}
+            onPress={() => navigation.navigate('HistorialTransacciones', { usuario_id })}
+          >
+            <Text style={{ color: '#fff', fontSize: 12 }}>Ver todas</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.tableHeader}>
+          <Text style={styles.th}>Tipo</Text>
+          <Text style={styles.th}>Monto</Text>
+          <Text style={styles.th}>Fecha</Text>
+        </View>
+        {transacciones.length === 0 ? (
+          <Text style={{ color: '#888', marginTop: 8 }}>No hay transacciones recientes.</Text>
+        ) : (
+          transacciones.map(t => (
+            <View key={t.id_trans} style={styles.tableRow}>
+              <Text style={styles.td}>{t.tipo_aport_trans}</Text>
+              <Text style={styles.td}>${t.monto_trans}</Text>
+              <Text style={styles.td}>{t.fec_h_trans?.slice(0, 10)}</Text>
+            </View>
+          ))
+        )}
       </View>
+
       <View style={styles.section}>
         <Text style={styles.subtitle}>Mensaje del día:</Text>
         <Text>"Dios es amor y quien permanece en amor, permanece en Dios."</Text>
@@ -125,6 +153,7 @@ export default function FeligresScreen({ route, navigation }) {
         </View>
       </Modal>
 
+      {/* Botones adicionales */}
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Hacer Donación</Text>
       </TouchableOpacity>
@@ -154,4 +183,10 @@ const styles = StyleSheet.create({
   buttonText: { color: '#fff', fontWeight: 'bold' },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center' },
   modalContent: { backgroundColor: '#fff', borderRadius: 10, padding: 20, width: '90%' },
+  // Nuevos estilos para la tabla
+  tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderColor: '#ccc', paddingBottom: 4, marginTop: 8 },
+  th: { flex: 1, fontWeight: 'bold', color: '#4B9CD3', fontSize: 14 },
+  tableRow: { flexDirection: 'row', paddingVertical: 4, borderBottomWidth: 0.5, borderColor: '#eee' },
+  td: { flex: 1, fontSize: 13, color: '#333' },
+  smallButton: { backgroundColor: '#4B9CD3', paddingVertical: 4, paddingHorizontal: 10, borderRadius: 6, marginLeft: 8 },
 });
