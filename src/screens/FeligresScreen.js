@@ -5,7 +5,7 @@ import { guardarTarjeta } from '../API/tarjetas';
 import { Picker } from '@react-native-picker/picker';
 
 
-export default function FeligresScreen({ route }) {
+export default function FeligresScreen({ route, navigation }) {
   React.useEffect(() => {
     console.log('route.params:', route && route.params ? route.params : 'NO PARAMS');
   }, [route]);
@@ -134,7 +134,10 @@ export default function FeligresScreen({ route }) {
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Hacer Ofrenda</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('PerfilFeligres', { id_usu: usuario_id })}
+      >
         <Text style={styles.buttonText}>Ver Perfil</Text>
       </TouchableOpacity>
     </ScrollView>

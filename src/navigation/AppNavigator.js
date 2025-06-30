@@ -10,6 +10,7 @@ import FeligresScreen from '../screens/FeligresScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import EliminarUsuarioScreen from '../screens/DesactivarUsuarioScreen';
 import DesactivarUsuarioScreen from '../screens/DesactivarUsuarioScreen';
+import PerfilFeligresScreen from '../screens/PerfilFeligresScreen';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Feligres" component={FeligresScreen} />
         <Stack.Screen name="Perfil" component={ProfileScreen} />
         <Stack.Screen name="DesactivarUsuario" component={DesactivarUsuarioScreen} />
+        <Stack.Screen name="PerfilFeligres" component={PerfilFeligresScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

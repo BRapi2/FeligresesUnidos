@@ -76,3 +76,19 @@ export async function DesactivarUsuario(id_usu) {
     if (error) console.error('Error al desactivar usuario:', error);
   return { error };
 }
+export async function obtenerUsuarioPorId(id_usu) {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('*')
+    .eq('id_usu', id_usu)
+    .single();
+  return { data, error };
+}
+
+export async function actualizarUsuario(id_usu, updateData) {
+  const { error } = await supabase
+    .from('usuarios')
+    .update(updateData)
+    .eq('id_usu', id_usu);
+  return { error };
+}
