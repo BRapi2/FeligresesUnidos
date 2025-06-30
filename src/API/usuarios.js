@@ -76,6 +76,15 @@ export async function DesactivarUsuario(id_usu) {
     if (error) console.error('Error al desactivar usuario:', error);
   return { error };
 }
+
+export async function ActivarUsuario(id_usu) {
+  const { error } = await supabase
+    .from('usuarios')
+    .update({ activo_usu: true })
+    .eq('id_usu', id_usu);
+  return { error };
+}
+
 export async function obtenerUsuarioPorId(id_usu) {
   const { data, error } = await supabase
     .from('usuarios')

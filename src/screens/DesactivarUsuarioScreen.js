@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
-import { obtenerUsuarios, DesactivarUsuario } from '../API/usuarios';
+import { obtenerUsuarios, DesactivarUsuario, ActivarUsuario } from '../API/usuarios';
 
 export default function DesactivarUsuarioScreen() {
   const [usuarios, setUsuarios] = useState([]);
@@ -46,8 +46,32 @@ export default function DesactivarUsuarioScreen() {
             if (error) {
               Alert.alert('Error', 'No se pudo desactivar el usuario');
             } else {
-              setUsuarios(usuarios.filter(u => u.id_usu !== id_usu));
+              // Actualiza el estado local
+              setUsuarios(usuarios.map(u => u.id_usu === id_usu ? { ...u, activo_usu: false } : u));
               Alert.alert('Éxito', 'Usuario desactivado');
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  const handleActivar = (id_usu) => {
+    Alert.alert(
+      'Confirmar activación',
+      `¿Seguro que deseas activar al usuario ${id_usu}?`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Activar',
+          style: 'default',
+          onPress: async () => {
+            const { error } = await ActivarUsuario(id_usu);
+            if (error) {
+              Alert.alert('Error', 'No se pudo activar el usuario');
+            } else {
+              setUsuarios(usuarios.map(u => u.id_usu === id_usu ? { ...u, activo_usu: true } : u));
+              Alert.alert('Éxito', 'Usuario activado');
             }
           }
         }
@@ -57,7 +81,7 @@ export default function DesactivarUsuarioScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Desactivar Usuario</Text>
+      <Text style={styles.title}>Activar/Desactivar Usuario</Text>
       <TextInput
         style={styles.input}
         placeholder="Buscar por ID o nombre"
@@ -69,13 +93,24 @@ export default function DesactivarUsuarioScreen() {
         keyExtractor={item => item.id_usu}
         renderItem={({ item }) => (
           <View style={styles.usuarioItem}>
-            <Text>{item.id_usu} - {item.nom_usu} {item.ape_usu}</Text>
-            <TouchableOpacity
-              style={styles.desactivarBtn}
-              onPress={() => handleDesactivar(item.id_usu)}
-            >
-              <Text style={{ color: '#fff' }}>Desactivar</Text>
-            </TouchableOpacity>
+            <Text>
+              {item.id_usu} - {item.nom_usu} {item.ape_usu} {item.activo_usu === false ? '(Inactivo)' : ''}
+            </Text>
+            {item.activo_usu === false ? (
+              <TouchableOpacity
+                style={styles.activarBtn}
+                onPress={() => handleActivar(item.id_usu)}
+              >
+                <Text style={{ color: '#fff' }}>Activar</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.desactivarBtn}
+                onPress={() => handleDesactivar(item.id_usu)}
+              >
+                <Text style={{ color: '#fff' }}>Desactivar</Text>
+              </TouchableOpacity>
+            )}
           </View>
         )}
       />
@@ -88,5 +123,6 @@ const styles = StyleSheet.create({
   title: { fontSize: 22, fontWeight: 'bold', marginBottom: 16 },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, marginBottom: 12 },
   usuarioItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, borderBottomWidth: 1, borderColor: '#eee' },
-  desactivarBtn: { backgroundColor: '#d9534f', padding: 8, borderRadius: 6 }
+  desactivarBtn: { backgroundColor: '#d9534f', padding: 8, borderRadius: 6 },
+  activarBtn: { backgroundColor: '#5cb85c', padding: 8, borderRadius: 6 }
 });
