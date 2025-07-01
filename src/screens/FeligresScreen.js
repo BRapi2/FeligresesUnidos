@@ -26,39 +26,44 @@ export default function FeligresScreen({ route, navigation }) {
   }, [usuario_id]);
 
   const handleGuardar = async () => {
-    if (!usuario_id) {
-      console.error('usuario_id no recibido:', usuario_id);
-      Alert.alert('Error', 'No se encontró el usuario. Vuelve a iniciar sesión.');
-      return;
-    }
-    if (!titular || !numero || !fecha || numero.length < 16) {
-      Alert.alert('Error', 'Completa todos los campos y verifica el número');
-      return;
-    }
-    const ultimos4 = numero.slice(-4);
-    const numero_encriptado = numero; // En producción, cifra este valor
+  if (!usuario_id) {
+    console.error('usuario_id no recibido:', usuario_id);
+    Alert.alert('Error', 'No se encontró el usuario. Vuelve a iniciar sesión.');
+    return;
+  }
+  if (!titular || !numero || !fecha || numero.length < 16) {
+    Alert.alert('Error', 'Completa todos los campos y verifica el número');
+    return;
+  }
+  // Validar formato MM/AA
+  if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(fecha)) {
+    Alert.alert('Error', 'La fecha debe tener formato MM/AA');
+    return;
+  }
+  const ultimos4 = numero.slice(-4);
+  const numero_encriptado = numero; // En producción, cifra este valor
 
-    const { error } = await guardarTarjeta({
-      usuario_id,
-      titular_tarjeta: titular,
-      numero_tarjeta_encriptado: numero_encriptado,
-      fecha_expiracion: fecha,
-      ultimos4,
-      marca
-    });
+  const { error } = await guardarTarjeta({
+    usuario_id,
+    titular_tarjeta: titular,
+    numero_tarjeta_encriptado: numero_encriptado,
+    fecha_expiracion: fecha,
+    ultimos4,
+    marca
+  });
 
-    if (error) {
-      console.error('Error al guardar tarjeta:', error);
-      Alert.alert('Error', 'No se pudo guardar la tarjeta');
-    } else {
-      Alert.alert('Éxito', 'Tarjeta guardada correctamente');
-      setTitular('');
-      setNumero('');
-      setFecha('');
-      setMarca('Visa');
-      setModalVisible(false);
-    }
-  };
+  if (error) {
+    console.error('Error al guardar tarjeta:', error);
+    Alert.alert('Error', 'No se pudo guardar la tarjeta');
+  } else {
+    Alert.alert('Éxito', 'Tarjeta guardada correctamente');
+    setTitular('');
+    setNumero('');
+    setFecha('');
+    setMarca('Visa');
+    setModalVisible(false);
+  }
+};
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -128,11 +133,21 @@ export default function FeligresScreen({ route, navigation }) {
               maxLength={16}
             />
             <TextInput
-              style={styles.input}
-              placeholder="Fecha de expiración (YYYY-MM-DD)"
-              value={fecha}
-              onChangeText={setFecha}
-            />
+  style={styles.input}
+  placeholder="Fecha de expiración (MM/AA)"
+  value={fecha}
+  onChangeText={text => {
+    // Solo permite números y la barra, y máximo 5 caracteres
+    let formatted = text.replace(/[^0-9/]/g, '').slice(0, 5);
+    // Inserta la barra automáticamente después de dos dígitos
+    if (formatted.length === 2 && fecha.length === 1) {
+      formatted += '/';
+    }
+    setFecha(formatted);
+  }}
+  keyboardType="numeric"
+  maxLength={5}
+/>
             <Picker
               selectedValue={marca}
               style={styles.input}
