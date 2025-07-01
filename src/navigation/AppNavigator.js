@@ -12,6 +12,7 @@ import EliminarUsuarioScreen from '../screens/DesactivarUsuarioScreen';
 import DesactivarUsuarioScreen from '../screens/DesactivarUsuarioScreen';
 import PerfilFeligresScreen from '../screens/PerfilFeligresScreen';
 import HistorialTransaccionesScreen from '../screens/HistorialTransaccionesScreen';
+import PagoCulqiScreen from '../screens/PagoCulqiScreen';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ export default function AppNavigator() {
         <Stack.Screen name="DesactivarUsuario" component={DesactivarUsuarioScreen} />
         <Stack.Screen name="PerfilFeligres" component={PerfilFeligresScreen} />
         <Stack.Screen name="HistorialTransacciones" component={HistorialTransaccionesScreen} />
+        <Stack.Screen name="PagoCulqi" component={PagoCulqiScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -153,14 +153,23 @@ export default function FeligresScreen({ route, navigation }) {
         </View>
       </Modal>
 
-      {/* Botones adicionales */}
-      <TouchableOpacity style={styles.button}>
+      {/* Botones de aportes usando Culqi */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('PagoCulqi', { monto: 100, tipo: 'donacion', usuario_id })}
+      >
         <Text style={styles.buttonText}>Hacer Donación</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('PagoCulqi', { monto: 50, tipo: 'diezmo', usuario_id })}
+      >
         <Text style={styles.buttonText}>Hacer Diezmo</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('PagoCulqi', { monto: 30, tipo: 'ofrenda', usuario_id })}
+      >
         <Text style={styles.buttonText}>Hacer Ofrenda</Text>
       </TouchableOpacity>
       <TouchableOpacity
