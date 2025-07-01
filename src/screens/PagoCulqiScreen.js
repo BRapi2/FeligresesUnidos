@@ -5,7 +5,7 @@ import { WebView } from 'react-native-webview';
 export default function PagoCulqiScreen({ route, navigation }) {
   const { monto, tipo, usuario_id } = route.params;
 
-  // Reemplaza TU_LLAVE_PUBLICA por tu llave pública de Culqi
+  // Usa tu llave pública de pruebas de Culqi
   const culqiFormHtml = `
     <html>
       <head>
@@ -15,7 +15,7 @@ export default function PagoCulqiScreen({ route, navigation }) {
         <button id="payBtn">Pagar</button>
         <script>
           document.getElementById('payBtn').onclick = function() {
-            Culqi.publicKey = 'TU_LLAVE_PUBLICA';
+            Culqi.publicKey = 'pk_test_7e6e1b6e6e6e6e6e'; // Llave pública de pruebas
             Culqi.settings({
               title: 'Aporte Iglesia',
               currency: 'PEN',
@@ -36,7 +36,7 @@ export default function PagoCulqiScreen({ route, navigation }) {
     const data = JSON.parse(event.nativeEvent.data);
     if (data && data.id) {
       // Aquí deberías enviar el token a tu backend para procesar el pago y guardar la transacción en Supabase
-      Alert.alert('Pago', 'Token recibido: ' + data.id);
+      Alert.alert('Pago de prueba', 'Token recibido: ' + data.id);
       navigation.goBack();
     } else {
       Alert.alert('Error', 'No se pudo procesar el pago');
