@@ -1,5 +1,5 @@
 import { supabase } from './supabaseClient';
-
+// prueba
 export async function obtenerIglesias() {
   const { data, error } = await supabase
     .from('iglesias_locales')
