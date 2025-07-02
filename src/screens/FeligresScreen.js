@@ -35,8 +35,12 @@ export default function FeligresScreen({ route, navigation }) {
       Alert.alert('Error', 'Completa todos los campos y verifica el número');
       return;
     }
-    const ultimos4 = numero.slice(-4);
-    const numero_encriptado = numero; // En producción, cifra este valor
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(fecha)) {
+        Alert.alert('Error', 'La fecha debe tener formato MM/YY y el mes debe ser válido (01-12)');
+        return;
+      }
+    const ultimos4 = numero.replace(/-/g, '').slice(-4);
+    const numero_encriptado = numero.replace(/-/g, ''); // Solo dígitos
 
     const { error } = await guardarTarjeta({
       usuario_id,
@@ -123,16 +127,40 @@ export default function FeligresScreen({ route, navigation }) {
               style={styles.input}
               placeholder="Número de tarjeta"
               value={numero}
-              onChangeText={setNumero}
+              onChangeText={text => {
+                // Elimina todo lo que no sea número
+                let cleaned = text.replace(/[^0-9]/g, '');
+                // Limita a 16 dígitos
+                if (cleaned.length > 16) cleaned = cleaned.slice(0, 16);
+                // Inserta un guion cada 4 dígitos
+                let formatted = cleaned.match(/.{1,4}/g)?.join('-') || '';
+                setNumero(formatted);
+              }}
               keyboardType="numeric"
-              maxLength={16}
+              maxLength={19} // 16 dígitos + 3 guiones
             />
             <TextInput
-              style={styles.input}
-              placeholder="Fecha de expiración (YYYY-MM-DD)"
-              value={fecha}
-              onChangeText={setFecha}
-            />
+                style={styles.input}
+                placeholder="Fecha de expiración (MM/YY)"
+                value={fecha}
+                onChangeText={text => {
+                  // Elimina cualquier caracter que no sea número
+                  let cleaned = text.replace(/[^0-9]/g, '');
+
+                  // Limita a 4 dígitos (MMYY)
+                  if (cleaned.length > 4) cleaned = cleaned.slice(0, 4);
+
+                  // Inserta el "/" automáticamente después de los dos primeros dígitos
+                  let formatted = cleaned;
+                  if (cleaned.length > 2) {
+                    formatted = cleaned.slice(0, 2) + '/' + cleaned.slice(2);
+                  }
+
+                  setFecha(formatted);
+                }}
+                keyboardType="numeric"
+                maxLength={5}
+              />
             <Picker
               selectedValue={marca}
               style={styles.input}
