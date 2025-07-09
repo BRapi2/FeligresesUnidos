@@ -4,6 +4,13 @@ import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { obtenerHistorialTransacciones } from '../API/transacciones';
 
+const LILA = '#A084E8';
+const LILA_OSCURO = '#6741D9';
+const LILA_CLARO = '#F3F0FF';
+const BLANCO = '#fff';
+const TEXTO = '#2a2a2a';
+const GRIS = '#e0e7f0';
+
 export default function HistorialTransaccionesScreen({ route }) {
   const usuario_id = route.params.usuario_id;
   const [tipo, setTipo] = useState('');
@@ -19,12 +26,10 @@ export default function HistorialTransaccionesScreen({ route }) {
 
   useEffect(() => { buscar(); }, []);
 
-  // Cuando el usuario selecciona una fecha
   const onChangeDate = (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) {
       setDateObj(selectedDate);
-      // Formatea la fecha a YYYY-MM-DD
       const yyyy = selectedDate.getFullYear();
       const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
       const dd = String(selectedDate.getDate()).padStart(2, '0');
@@ -32,7 +37,6 @@ export default function HistorialTransaccionesScreen({ route }) {
     }
   };
 
-  // Traducción para mostrar el tipo en texto amigable
   const tipoLabel = tipo === 'donacion'
     ? 'Donación'
     : tipo === 'diezmo'
@@ -48,10 +52,9 @@ export default function HistorialTransaccionesScreen({ route }) {
         <Text style={styles.buttonText}>Filtrar</Text>
       </TouchableOpacity>
 
-      {/* Filtros activos */}
       {(tipo || fecha) && (
         <View style={{ marginBottom: 10 }}>
-          <Text style={{ color: '#2a4d69', fontWeight: 'bold' }}>
+          <Text style={{ color: LILA_OSCURO, fontWeight: 'bold' }}>
             Filtrando por:
             {tipoLabel ? ` ${tipoLabel}` : ''}
             {tipoLabel && fecha ? ' | ' : ''}
@@ -86,7 +89,7 @@ export default function HistorialTransaccionesScreen({ route }) {
               style={[styles.input, { justifyContent: 'center', height: 48 }]}
               onPress={() => setShowDatePicker(true)}
             >
-              <Text style={{ color: fecha ? '#222' : '#888' }}>
+              <Text style={{ color: fecha ? TEXTO : '#888' }}>
                 {fecha ? fecha : 'Selecciona una fecha'}
               </Text>
             </TouchableOpacity>
@@ -120,40 +123,35 @@ export default function HistorialTransaccionesScreen({ route }) {
         </View>
       </Modal>
 
-      <View style={styles.tableHeader}>
-        <Text style={styles.th}>Tipo</Text>
-        <Text style={styles.th}>Monto</Text>
-        <Text style={styles.th}>Fecha</Text>
-      </View>
       <FlatList
         data={transacciones}
         keyExtractor={item => item.id_trans}
         renderItem={({ item }) => (
-          <View style={styles.tableRow}>
-            <Text style={styles.td}>{item.tipo_aport_trans}</Text>
-            <Text style={styles.td}>${item.monto_trans}</Text>
-            <Text style={styles.td}>{item.fec_h_trans?.slice(0, 10)}</Text>
+          <View style={styles.card}>
+            <Text style={styles.cardTipo}>{item.tipo_aport_trans.charAt(0).toUpperCase() + item.tipo_aport_trans.slice(1)}</Text>
+            <Text style={styles.cardMonto}>S/ {item.monto_trans}</Text>
+            <Text style={styles.cardFecha}>{item.fec_h_trans?.slice(0, 10)}</Text>
           </View>
         )}
         ListEmptyComponent={<Text style={{ color: '#888', marginTop: 8 }}>No hay resultados.</Text>}
+        style={{ marginTop: 10 }}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#f7fafd' },
-  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 16, color: '#2a4d69' },
-  button: { backgroundColor: '#4B9CD3', padding: 10, borderRadius: 8, marginBottom: 10 },
-  buttonText: { color: '#fff', fontWeight: 'bold', textAlign: 'center' },
-  tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderColor: '#ccc', paddingBottom: 4, marginTop: 8 },
-  th: { flex: 1, fontWeight: 'bold', color: '#4B9CD3', fontSize: 14 },
-  tableRow: { flexDirection: 'row', paddingVertical: 4, borderBottomWidth: 0.5, borderColor: '#eee' },
-  td: { flex: 1, fontSize: 13, color: '#333' },
-  // Modal styles
+  container: { flex: 1, padding: 20, backgroundColor: LILA_CLARO },
+  title: { fontSize: 26, fontWeight: 'bold', marginBottom: 16, color: LILA_OSCURO, textAlign: 'center', letterSpacing: 0.5 },
+  button: { backgroundColor: LILA, padding: 14, borderRadius: 12, marginBottom: 10, alignItems: 'center', shadowColor: LILA, shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.18, shadowRadius: 8, elevation: 4 },
+  buttonText: { color: BLANCO, fontWeight: 'bold', textAlign: 'center', fontSize: 16, letterSpacing: 0.5 },
+  card: { backgroundColor: BLANCO, borderRadius: 18, padding: 18, marginBottom: 14, shadowColor: LILA, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.10, shadowRadius: 12, elevation: 4, alignItems: 'center' },
+  cardTipo: { fontWeight: 'bold', color: LILA, fontSize: 18, marginBottom: 4 },
+  cardMonto: { fontSize: 22, fontWeight: 'bold', color: LILA_OSCURO, marginBottom: 2 },
+  cardFecha: { fontSize: 14, color: TEXTO, opacity: 0.7 },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center' },
-  modalContent: { backgroundColor: '#fff', borderRadius: 10, padding: 20, width: '90%' },
-  subtitle: { fontWeight: 'bold', fontSize: 18, marginBottom: 8 },
-  label: { fontWeight: 'bold', marginBottom: 4, color: '#4B9CD3', fontSize: 15 },
-  input: { borderWidth: 1, borderColor: '#b3c6e7', borderRadius: 8, padding: 12, backgroundColor: '#fff', marginBottom: 12 },
+  modalContent: { backgroundColor: BLANCO, borderRadius: 18, padding: 24, width: '92%', shadowColor: LILA, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 10, elevation: 6 },
+  subtitle: { fontWeight: 'bold', fontSize: 18, marginBottom: 8, color: LILA },
+  label: { fontWeight: 'bold', marginBottom: 4, color: LILA, fontSize: 15 },
+  input: { borderWidth: 1, borderColor: GRIS, borderRadius: 12, padding: 14, backgroundColor: BLANCO, marginBottom: 12 },
 });

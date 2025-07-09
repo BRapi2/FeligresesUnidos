@@ -16,6 +16,7 @@ export default function RegisterScreen({ navigation }) {
   const rol = 'feligres';
   const [iglesias, setIglesias] = useState([]);
   const [loadingIglesias, setLoadingIglesias] = useState(true);
+  const [ingresoMensual, setIngresoMensual] = useState('');
 
   React.useEffect(() => {
     obtenerIglesias().then(({ data, error }) => {
@@ -40,9 +41,11 @@ export default function RegisterScreen({ navigation }) {
       Alert.alert('Error', 'Correo electrónico inválido');
       return;
     }
-    // Generar ID_USU automático
-    //const ID_USU = (rol[0].toUpperCase() || 'F') + Math.floor(100000 + Math.random() * 900000);
-
+    if (!ingresoMensual) {
+      Alert.alert('Error', 'Debes ingresar tu ingreso mensual');
+      return;
+    }
+    
     const usuario = {
       dni_usu: dni,
       nom_usu: nombre,
@@ -54,6 +57,7 @@ export default function RegisterScreen({ navigation }) {
       iglesias_locales_id: iglesiaId || null,
       rol_usu: rol,
       crea_usu: null,
+      ingreso_mensual: ingresoMensual, // <-- agrega esto
     };
 
     const { error } = await registrarUsuario(usuario);
@@ -75,6 +79,13 @@ export default function RegisterScreen({ navigation }) {
       <TextInput style={styles.input} placeholder="Correo electrónico" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
       <TextInput style={styles.input} placeholder="Correo principal (opcional)" value={emailPrincipal} onChangeText={setEmailPrincipal} keyboardType="email-address" autoCapitalize="none" />
       <TextInput style={styles.input} placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
+      <TextInput
+        style={styles.input}
+        placeholder="Ingreso mensual (S/)"
+        value={ingresoMensual}
+        onChangeText={setIngresoMensual}
+        keyboardType="numeric"
+      />
       {/* Picker para iglesia */}
       <View style={{ marginBottom: 18, borderRadius: 12, overflow: 'hidden', backgroundColor: LILA_CLARO, borderWidth: 1, borderColor: GRIS }}>
         {loadingIglesias ? (

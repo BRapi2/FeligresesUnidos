@@ -104,3 +104,22 @@ export async function actualizarUsuario(id_usu, updateData) {
     .eq('id_usu', id_usu);
   return { error };
 }
+
+export async function actualizarIngresoMensual(id_usu, ingreso) {
+  const { error } = await supabase
+    .from('usuarios')
+    .update({ ingreso_mensual: ingreso })
+    .eq('id_usu', id_usu);
+  return { error };
+}
+
+const handleGuardarIngreso = async () => {
+  console.log('Intentando actualizar:', usuario.id_usu, ingresoMensual);
+  const { error } = await actualizarUsuario(usuario.id_usu, { ingreso_mensual: ingresoMensual });
+  if (!error) {
+    Alert.alert('Éxito', 'Ingreso mensual actualizado');
+  } else {
+    console.log('Error al actualizar ingreso:', error);
+    Alert.alert('Error', 'No se pudo actualizar: ' + (error.message || JSON.stringify(error)));
+  }
+};

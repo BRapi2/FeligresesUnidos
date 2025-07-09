@@ -8,6 +8,7 @@ export default function PerfilFeligresScreen({ route, navigation }) {
   const [usuario, setUsuario] = useState(null);
   const [editando, setEditando] = useState(false);
   const [form, setForm] = useState({});
+  const [ingresoMensual, setIngresoMensual] = useState(usuario?.ingreso_mensual || '');
 
   useEffect(() => {
     obtenerUsuarioPorId(id_usu).then(({ data, error }) => {
@@ -41,6 +42,17 @@ export default function PerfilFeligresScreen({ route, navigation }) {
       Alert.alert('Éxito', 'Perfil actualizado');
       setEditando(false);
       setUsuario({ ...usuario, ...updateData });
+    }
+  };
+
+  const handleGuardarIngreso = async () => {
+    console.log('Intentando actualizar:', usuario.id_usu, ingresoMensual);
+    const { error } = await actualizarUsuario(usuario.id_usu, { ingreso_mensual: ingresoMensual });
+    if (!error) {
+      Alert.alert('Éxito', 'Ingreso mensual actualizado');
+    } else {
+      console.log('Error al actualizar ingreso:', error);
+      Alert.alert('Error', 'No se pudo actualizar: ' + (error.message || JSON.stringify(error)));
     }
   };
 
@@ -162,6 +174,22 @@ export default function PerfilFeligresScreen({ route, navigation }) {
               secureTextEntry
             />
           </View>
+        </View>
+
+        <View style={styles.fieldGroup}>
+          <Text style={styles.label}>Ingreso mensual:</Text>
+          <View style={styles.inputContainer}>
+            <Ionicons name="cash" size={20} color="#888" style={styles.inputIcon} />
+            <TextInput
+              style={editando ? styles.inputActive : styles.input}
+              value={ingresoMensual}
+              onChangeText={setIngresoMensual}
+              keyboardType="numeric"
+            />
+          </View>
+          <TouchableOpacity style={styles.button} onPress={handleGuardarIngreso}>
+            <Text style={styles.buttonText}>Guardar ingreso</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -387,5 +415,17 @@ const styles = StyleSheet.create({
     color: '#555',
     fontSize: 16,
     marginLeft: 12,
+  },
+  button: {
+    backgroundColor: LILA,
+    padding: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
+    shadowColor: LILA,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.22,
+    shadowRadius: 8,
+    elevation: 6,
   },
 });

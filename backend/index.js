@@ -24,7 +24,7 @@ app.post('/test/echo', (req, res) => {
 
 // Endpoint para crear preferencia de pago
 app.post('/mercadopago/crear-preferencia', async (req, res) => {
-  console.log('Llamada recibida:', req.body); // <-- LOG 1
+  console.log('Llamada recibida:', req.body);
 
   if (!req.body || !req.body.monto || !req.body.descripcion || !req.body.usuario_id || !req.body.iglesia_id) {
     console.error('Body inválido:', req.body);
@@ -59,7 +59,8 @@ app.post('/mercadopago/crear-preferencia', async (req, res) => {
         tipo_aport_trans: descripcion,
         metodo_pago: 'mercadopago',
         estado_pago: 'pendiente'
-      }]);
+      }])
+      .select(); // <-- Esto pide que retorne el registro insertado
     if (error) {
       console.error('Error al registrar en Supabase:', error);
     } else {
