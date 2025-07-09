@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { insertarTransaccion } from '../API/transacciones';
 
 const URL_BACKEND = "https://feligresesunidos-nl4l.onrender.com";
 
@@ -33,8 +34,16 @@ export default function PagoMercadoPagoScreen({ route, navigation }) {
         source={{ uri: url }}
         startInLoadingState
         renderLoading={() => <ActivityIndicator size="large" color="#A084E8" />}
-        onNavigationStateChange={navState => {
+        onNavigationStateChange={async navState => {
           if (navState.url.includes('success')) {
+            // Guardar transacción en Supabase
+            await insertarTransaccion({
+              usuario_id,
+              iglesia_id,
+              monto,
+              tipo_aport_trans: descripcion, // O ajusta según tu lógica de tipo
+              descripcion
+            });
             navigation.replace('ConfirmacionPago', { exito: true });
           }
           if (navState.url.includes('failure') || navState.url.includes('pending')) {

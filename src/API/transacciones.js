@@ -54,3 +54,19 @@ export async function obtenerUltimosMovimientosIglesia(iglesia_id, limite = 5) {
     .limit(limite);
   return { data, error };
 }
+
+export async function insertarTransaccion({ usuario_id, iglesia_id, monto, tipo_aport_trans, descripcion }) {
+  const { data, error } = await supabase
+    .from('transacciones')
+    .insert([
+      {
+        usuario_id,
+        iglesia_id,
+        monto_trans: monto,
+        tipo_aport_trans,
+        descripcion_trans: descripcion,
+        fec_h_trans: new Date().toISOString()
+      }
+    ]);
+  return { data, error };
+}
