@@ -11,6 +11,7 @@ export default function FeligresScreen({ route, navigation }) {
   }, [route]);
 
   const usuario_id = route?.params?.id_usu;
+  const iglesia_id = route?.params?.iglesia_id; // Debes obtenerlo del perfil del usuario
 
   const [titular, setTitular] = useState('');
   const [numero, setNumero] = useState('');
@@ -310,19 +311,19 @@ export default function FeligresScreen({ route, navigation }) {
       {/* Botones de aportes usando MercadoPago */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('AporteScreen', { tipo: 'diezmo', usuario_id })}
+        onPress={() => navigation.navigate('AporteScreen', { tipo: 'diezmo', usuario_id, iglesia_id })}
       >
         <Text style={styles.buttonText}>Hacer Diezmo</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('AporteScreen', { tipo: 'donacion', usuario_id })}
+        onPress={() => navigation.navigate('AporteScreen', { tipo: 'donacion', usuario_id, iglesia_id })}
       >
         <Text style={styles.buttonText}>Hacer Donación</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('AporteScreen', { tipo: 'ofrenda', usuario_id })}
+        onPress={() => navigation.navigate('AporteScreen', { tipo: 'ofrenda', usuario_id, iglesia_id })}
       >
         <Text style={styles.buttonText}>Hacer Ofrenda</Text>
       </TouchableOpacity>

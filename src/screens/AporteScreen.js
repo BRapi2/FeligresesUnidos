@@ -8,7 +8,7 @@ const LILA_CLARO = '#F3F0FF';
 const BLANCO = '#fff';
 
 export default function AporteScreen({ route, navigation }) {
-  const { tipo, usuario_id } = route.params;
+  const { usuario_id, iglesia_id, tipo } = route.params;
   const [monto, setMonto] = useState('');
   const [ingreso, setIngreso] = useState(null);
 
@@ -34,6 +34,12 @@ export default function AporteScreen({ route, navigation }) {
       Alert.alert('Error', 'Ingresa un monto válido');
       return;
     }
+    const body = {
+      monto,
+      descripcion: tipo,
+      usuario_id,
+      iglesia_id
+    };
     navigation.navigate('PagoMercadoPagoScreen', {
       monto: montoNum,
       descripcion: tipo.charAt(0).toUpperCase() + tipo.slice(1),

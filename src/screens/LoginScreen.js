@@ -32,7 +32,10 @@ export default function LoginScreen({ navigation }) {
       // navega segun el rol del usuario
       switch (data.rol_usu) {
         case 'feligres':
-          navigation.navigate('Feligres', { id_usu: data.id_usu });
+          navigation.navigate('Feligres', { 
+            id_usu: data.id_usu, 
+            iglesia_id: data.iglesias_locales_id // <-- asegúrate que este es el nombre correcto
+          });
           break;
         case 'tesorero':
           navigation.navigate('Tesorero', { id_usu: data.id_usu });

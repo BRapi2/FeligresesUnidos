@@ -2,15 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 
+const URL_BACKEND = "https://feligresesunidos-nl4l.onrender.com";
+
 export default function PagoMercadoPagoScreen({ route, navigation }) {
-  const { monto, descripcion, usuario_id } = route.params;
+  const { monto, descripcion, usuario_id, iglesia_id } = route.params;
   const [url, setUrl] = useState(null);
 
   useEffect(() => {
-    fetch('https://feligresesunidos-nl4l.onrender.com/mercadopago/crear-preferencia', {
+    fetch(`${URL_BACKEND}/mercadopago/crear-preferencia`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ monto, descripcion, usuario_id })
+      body: JSON.stringify({
+        monto,
+        descripcion,
+        usuario_id,
+        iglesia_id
+      })
     })
       .then(res => res.json())
       .then(data => setUrl(data.init_point));
