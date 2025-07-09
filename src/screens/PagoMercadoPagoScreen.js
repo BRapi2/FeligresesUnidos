@@ -6,7 +6,8 @@ import { insertarTransaccion } from '../API/transacciones';
 const URL_BACKEND = "https://feligresesunidos-nl4l.onrender.com";
 
 export default function PagoMercadoPagoScreen({ route, navigation }) {
-  const { monto, descripcion, usuario_id, iglesia_id } = route.params;
+  // Cambia los nombres para que coincidan con los params reales
+  const { monto, descripcion, id_usu, iglesia_id } = route.params;
   const [url, setUrl] = useState(null);
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export default function PagoMercadoPagoScreen({ route, navigation }) {
       body: JSON.stringify({
         monto,
         descripcion,
-        usuario_id,
+        usuario_id: id_usu, // usa el nombre correcto
         iglesia_id
       })
     })
@@ -38,7 +39,7 @@ export default function PagoMercadoPagoScreen({ route, navigation }) {
           if (navState.url.includes('success')) {
             // Guardar transacción en Supabase
             await insertarTransaccion({
-              usuario_id,
+              usuario_id: id_usu, // usa el nombre correcto
               iglesia_id,
               monto,
               tipo_aport_trans: descripcion, // O ajusta según tu lógica de tipo
