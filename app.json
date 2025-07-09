@@ -1,5 +1,10 @@
 {
   "android": {
     "package": "com.anonymous.feligresesunidosjamasseranvencidos"
+  },
+  "extra": {
+    "eas": {
+      "projectId": "547b9d24-c8a8-4657-b05e-b1989cf3f031"
+    }
   }
 }
