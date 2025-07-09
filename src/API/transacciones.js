@@ -54,3 +54,62 @@ export async function obtenerUltimosMovimientosIglesia(iglesia_id, limite = 5) {
     .limit(limite);
   return { data, error };
 }
+
+export async function obtenerTransaccionesPendientes(iglesia_id) {
+  const { data, error } = await supabase
+    .from('transacciones')
+    .select('*')
+    .eq('estado_pago', 'pendiente')
+    .eq('iglesia_id', iglesia_id);
+  return { data, error };
+}
+
+export async function aprobarTransaccion(id_trans, id_tesorero) {
+  const { error } = await supabase
+    .from('transacciones')
+    .update({
+      estado_pago: 'aprobado',
+      validado_por_trans: id_tesorero,
+      fec_valid_trans: new Date().toISOString()
+    })
+    .eq('id_trans', id_trans);
+  return { error };
+}
+
+export async function desaprobarTransaccion(id_trans, tesorero_id) {
+  return await supabase
+    .from('transacciones')
+    .update({
+      estado_pago: 'rechazado', // <-- usa "rechazado"
+      validado_por_trans: tesorero_id,
+      fec_valid_trans: new Date().toISOString(),
+    })
+    .eq('id_trans', id_trans);
+}
+
+export async function obtenerMovimientosFiltrados(iglesiaId, mes, anio, tipo) {
+  // Implementa la consulta a Supabase filtrando por iglesia, mes, año y tipo
+  // Ejemplo:
+  let query = supabase
+    .from('movimientos')
+    .select('*')
+    .eq('iglesia_id', iglesiaId);
+
+  if (tipo) query = query.eq('tipo_mi', tipo);
+
+  // Filtra por mes y año usando la fecha
+  const fechaInicio = `${anio}-${String(mes + 1).padStart(2, '0')}-01`;
+  const fechaFin = `${anio}-${String(mes + 2).padStart(2, '0')}-01`;
+  query = query.gte('fec_h_mi', fechaInicio).lt('fec_h_mi', fechaFin);
+
+  const { data, error } = await query;
+  if (error) return { data: [], error };
+  // Agrupa por día para el gráfico
+  const dias = {};
+  (data || []).forEach(m => {
+    const dia = new Date(m.fec_h_mi).getDate();
+    dias[dia] = (dias[dia] || 0) + Number(m.monto_mi);
+  });
+  const grafico = Object.keys(dias).map(dia => ({ dia, monto: dias[dia] }));
+  return { data: grafico, error: null };
+}

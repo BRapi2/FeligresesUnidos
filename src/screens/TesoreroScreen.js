@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
 import { obtenerUltimasTransaccionesIglesia, obtenerUltimosMovimientosIglesia } from '../API/transacciones';
 import { obtenerUsuarioPorId } from '../API/usuarios';
@@ -11,7 +11,7 @@ const BLANCO = '#fff';
 const GRIS = '#e0e7f0';
 const TEXTO = '#2a2a2a';
 
-export default function TesoreroScreen({ route }) {
+export default function TesoreroScreen({ route, navigation }) {
   const id_usu = route?.params?.id_usu;
   const [iglesiaId, setIglesiaId] = useState(null);
   const [movimientos, setMovimientos] = useState([]);
@@ -63,33 +63,42 @@ export default function TesoreroScreen({ route }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Panel del Tesorero</Text>
+      {/* Botón para ir a aprobar transacciones */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('TransaccionesPendientes', { tesorero_id: id_usu, iglesia_id: iglesiaId })}
+      >
+        <Text style={styles.buttonText}>Aprobar Transacciones Pendientes</Text>
+      </TouchableOpacity>
       <View style={styles.section}>
         <Text style={styles.subtitle}>Movimientos Financieros (mes actual)</Text>
         {grafico.length === 0 ? (
           <Text style={styles.emptyText}>No hay movimientos este mes.</Text>
         ) : (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <BarChart
-              data={{
-                labels: grafico.map(m => m.dia),
-                datasets: [{ data: grafico.map(m => m.monto) }]
-              }}
-              width={Math.max(Dimensions.get('window').width - 60, grafico.length * 40)}
-              height={220}
-              yAxisLabel="S/"
-              chartConfig={{
-                backgroundColor: LILA_CLARO,
-                backgroundGradientFrom: LILA_CLARO,
-                backgroundGradientTo: BLANCO,
-                decimalPlaces: 0,
-                color: (opacity = 1) => `rgba(160, 132, 232, ${opacity})`,
-                labelColor: () => LILA_OSCURO,
-                style: { borderRadius: 16 },
-                propsForDots: { r: '6', strokeWidth: '2', stroke: LILA_OSCURO }
-              }}
-              style={{ marginVertical: 8, borderRadius: 16 }}
-            />
-          </ScrollView>
+          <TouchableOpacity onPress={() => navigation.navigate('FiltrarGraficoFinanciero', { iglesiaId })}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <BarChart
+                data={{
+                  labels: grafico.map(m => m.dia),
+                  datasets: [{ data: grafico.map(m => m.monto) }]
+                }}
+                width={Math.max(Dimensions.get('window').width - 60, grafico.length * 40)}
+                height={220}
+                yAxisLabel="S/"
+                chartConfig={{
+                  backgroundColor: LILA_CLARO,
+                  backgroundGradientFrom: LILA_CLARO,
+                  backgroundGradientTo: BLANCO,
+                  decimalPlaces: 0,
+                  color: (opacity = 1) => `rgba(160, 132, 232, ${opacity})`,
+                  labelColor: () => LILA_OSCURO,
+                  style: { borderRadius: 16 },
+                  propsForDots: { r: '6', strokeWidth: '2', stroke: LILA_OSCURO }
+                }}
+                style={{ marginVertical: 8, borderRadius: 16 }}
+              />
+            </ScrollView>
+          </TouchableOpacity>
         )}
       </View>
       {loading ? (
@@ -216,5 +225,24 @@ const styles = StyleSheet.create({
     color: '#888',
     marginTop: 8,
     textAlign: 'center',
+  },
+  button: {
+    backgroundColor: LILA,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginVertical: 7,
+    marginHorizontal: 20,
+    shadowColor: LILA,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  buttonText: {
+    color: BLANCO,
+    fontWeight: 'bold',
+    fontSize: 16,
+    letterSpacing: 0.5,
   },
 });

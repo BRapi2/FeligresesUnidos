@@ -15,7 +15,8 @@ import HistorialTransaccionesScreen from '../screens/HistorialTransaccionesScree
 import PagoCulqiScreen from '../screens/PagoCulqiScreen';
 import PagoMercadoPagoScreen from '../screens/PagoMercadoPagoScreen';
 import AporteScreen from '../screens/AporteScreen';
-
+import TransaccionesPendientesScreen from '../screens/TransaccionesPendientesScreen';
+import FiltrarGraficoFinancieroScreen from '../screens/FiltrarGraficoFinancieroScreen';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,16 @@ export default function AppNavigator() {
           name="AporteScreen"
           component={AporteScreen}
           options={{ title: 'Aporte' }}
+        />
+        <Stack.Screen
+          name="TransaccionesPendientes"
+          component={TransaccionesPendientesScreen}
+          options={{ title: 'Aprobar Transacciones' }}
+        />
+        <Stack.Screen
+          name="FiltrarGraficoFinanciero"
+          component={FiltrarGraficoFinancieroScreen}
+          options={{ title: 'Gráfico Financiero' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
