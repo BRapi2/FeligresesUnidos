@@ -123,3 +123,12 @@ const handleGuardarIngreso = async () => {
     Alert.alert('Error', 'No se pudo actualizar: ' + (error.message || JSON.stringify(error)));
   }
 };
+
+export async function obtenerUsuariosPorIds(ids) {
+  // Si ids es un array vacío, retorna vacío para evitar error
+  if (!ids || ids.length === 0) return { data: [], error: null };
+  return await supabase
+    .from('usuarios')
+    .select('id_usu, nom_usu, ape_usu')
+    .in('id_usu', ids);
+}
