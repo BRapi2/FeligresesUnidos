@@ -306,22 +306,22 @@ export default function FeligresScreen({ route, navigation }) {
         </View>
       </Modal>
 
-      {/* Botones de aportes usando Culqi */}
+      {/* Botones de aportes usando MercadoPago */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('PagoCulqi', { monto: 100, tipo: 'donacion', usuario_id })}
+        onPress={() => navigation.navigate('PagoMercadoPagoScreen', { monto: 1, descripcion: 'Donación', usuario_id })}
       >
         <Text style={styles.buttonText}>Hacer Donación</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('PagoCulqi', { monto: 50, tipo: 'diezmo', usuario_id })}
+        onPress={() => navigation.navigate('PagoMercadoPagoScreen', { monto: 1, descripcion: 'Diezmo', usuario_id })}
       >
         <Text style={styles.buttonText}>Hacer Diezmo</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('PagoCulqi', { monto: 30, tipo: 'ofrenda', usuario_id })}
+        onPress={() => navigation.navigate('PagoMercadoPagoScreen', { monto: 1, descripcion: 'Ofrenda', usuario_id })}
       >
         <Text style={styles.buttonText}>Hacer Ofrenda</Text>
       </TouchableOpacity>

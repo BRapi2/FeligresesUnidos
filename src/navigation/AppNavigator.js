@@ -13,6 +13,7 @@ import DesactivarUsuarioScreen from '../screens/DesactivarUsuarioScreen';
 import PerfilFeligresScreen from '../screens/PerfilFeligresScreen';
 import HistorialTransaccionesScreen from '../screens/HistorialTransaccionesScreen';
 import PagoCulqiScreen from '../screens/PagoCulqiScreen';
+import PagoMercadoPagoScreen from '../screens/PagoMercadoPagoScreen';
 
 
 const Stack = createStackNavigator();
@@ -32,7 +33,11 @@ export default function AppNavigator() {
         <Stack.Screen name="PerfilFeligres" component={PerfilFeligresScreen} />
         <Stack.Screen name="HistorialTransacciones" component={HistorialTransaccionesScreen} />
         <Stack.Screen name="PagoCulqi" component={PagoCulqiScreen} />
-       
+        <Stack.Screen
+          name="PagoMercadoPagoScreen"
+          component={PagoMercadoPagoScreen}
+          options={{ title: 'Pago MercadoPago' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
