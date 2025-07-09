@@ -1,4 +1,5 @@
 // backend/index.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mercadopago = require('mercadopago');
@@ -8,7 +9,7 @@ const PORT = 4000; // Puedes cambiar el puerto si lo deseas
 
 // Reemplaza esto con tu Access Token real de MercadoPago
 mercadopago.configure({
-  access_token: 'APP_USR-4309274482374379-070417-f22f76a68258b6c8fbc412c374d4559a-2529728011'
+  access_token: process.env.MP_ACCESS_TOKEN
 });
 
 app.use(cors());

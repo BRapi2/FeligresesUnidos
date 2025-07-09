@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert,
 import { guardarTarjeta } from '../API/tarjetas';
 import { obtenerUltimasTransacciones } from '../API/transacciones';
 import { Picker } from '@react-native-picker/picker';
+import AporteScreen from '../screens/AporteScreen';
 
 export default function FeligresScreen({ route, navigation }) {
   React.useEffect(() => {
@@ -309,19 +310,19 @@ export default function FeligresScreen({ route, navigation }) {
       {/* Botones de aportes usando MercadoPago */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('PagoMercadoPagoScreen', { monto: 1, descripcion: 'Donación', usuario_id })}
-      >
-        <Text style={styles.buttonText}>Hacer Donación</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('PagoMercadoPagoScreen', { monto: 1, descripcion: 'Diezmo', usuario_id })}
+        onPress={() => navigation.navigate('AporteScreen', { tipo: 'diezmo', usuario_id })}
       >
         <Text style={styles.buttonText}>Hacer Diezmo</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('PagoMercadoPagoScreen', { monto: 1, descripcion: 'Ofrenda', usuario_id })}
+        onPress={() => navigation.navigate('AporteScreen', { tipo: 'donacion', usuario_id })}
+      >
+        <Text style={styles.buttonText}>Hacer Donación</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('AporteScreen', { tipo: 'ofrenda', usuario_id })}
       >
         <Text style={styles.buttonText}>Hacer Ofrenda</Text>
       </TouchableOpacity>

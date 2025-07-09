@@ -7,7 +7,7 @@ export default function PagoMercadoPagoScreen({ route, navigation }) {
   const [url, setUrl] = useState(null);
 
   useEffect(() => {
-    fetch('http://10.0.2.2:4000/mercadopago/crear-preferencia', {
+    fetch('https://feligresesunidos-nl4l.onrender.com/mercadopago/crear-preferencia', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ monto, descripcion, usuario_id })
