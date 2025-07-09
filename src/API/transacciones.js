@@ -56,10 +56,31 @@ export async function obtenerUltimosMovimientosIglesia(iglesia_id, limite = 5) {
 }
 
 export async function insertarTransaccion({ usuario_id, iglesia_id, monto, tipo_aport_trans, descripcion }) {
+  // Obtener el último id_trans y num_trans existentes
+  const { data: lastTrans, error: lastError } = await supabase
+    .from('transacciones')
+    .select('id_trans, num_trans')
+    .order('fec_h_trans', { ascending: false })
+    .limit(1);
+
+  let nextIdTrans = 'TR00001';
+  let nextNumTrans = 'TX-000-0001';
+  if (lastTrans && lastTrans.length > 0) {
+    // Extraer el número y sumarle 1
+    const lastId = lastTrans[0].id_trans;
+    const lastNum = lastTrans[0].num_trans;
+    const idNum = parseInt(lastId.replace('TR', '')) + 1;
+    const numNum = parseInt(lastNum.replace(/TX-000-0*/, '')) + 1;
+    nextIdTrans = 'TR' + idNum.toString().padStart(5, '0');
+    nextNumTrans = 'TX-000-' + numNum.toString().padStart(4, '0');
+  }
+
   const { data, error } = await supabase
     .from('transacciones')
     .insert([
       {
+        id_trans: nextIdTrans,
+        num_trans: nextNumTrans,
         usuario_id,
         iglesia_id,
         monto_trans: monto,
