@@ -86,12 +86,15 @@ export async function ActivarUsuario(id_usu) {
 }
 
 export async function obtenerUsuarioPorId(id_usu) {
-  const { data, error } = await supabase
+  const { data: usuarioArr, error: errorUsu } = await supabase
     .from('usuarios')
     .select('*')
     .eq('id_usu', id_usu)
     .single();
-  return { data, error };
+  console.log('usuarioArr:', usuarioArr, 'errorUsu:', errorUsu);
+  const usuario = Array.isArray(usuarioArr) ? usuarioArr[0] : usuarioArr;
+  console.log('usuario:', usuario);
+  return { data: usuario, error: errorUsu };
 }
 
 export async function actualizarUsuario(id_usu, updateData) {

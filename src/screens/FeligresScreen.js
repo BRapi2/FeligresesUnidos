@@ -65,6 +65,133 @@ export default function FeligresScreen({ route, navigation }) {
     }
   };
 
+  const LILA = '#A084E8';
+  const LILA_OSCURO = '#6741D9';
+  const LILA_CLARO = '#F3F0FF';
+  const TEXTO = '#2a2a2a';
+  const GRIS = '#e0e7f0';
+  const BLANCO = '#fff';
+
+  const styles = StyleSheet.create({
+    container: {
+      flexGrow: 1,
+      padding: 0,
+      alignItems: 'stretch',
+      backgroundColor: LILA_CLARO,
+      paddingBottom: 30,
+    },
+    title: {
+      fontSize: 26,
+      fontWeight: 'bold',
+      marginBottom: 18,
+      color: LILA_OSCURO,
+      textAlign: 'center',
+      marginTop: 32,
+      letterSpacing: 0.5,
+    },
+    section: {
+      marginBottom: 24,
+      width: '90%',
+      alignSelf: 'center',
+      backgroundColor: BLANCO,
+      borderRadius: 20,
+      padding: 20,
+      shadowColor: LILA,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.10,
+      shadowRadius: 12,
+      elevation: 4,
+    },
+    subtitle: {
+      fontWeight: 'bold',
+      fontSize: 18,
+      marginBottom: 8,
+      color: LILA,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: GRIS,
+      borderRadius: 12,
+      padding: 14,
+      marginBottom: 12,
+      backgroundColor: LILA_CLARO,
+      color: TEXTO,
+      fontSize: 16,
+    },
+    button: {
+      backgroundColor: LILA,
+      padding: 16,
+      borderRadius: 12,
+      alignItems: 'center',
+      marginVertical: 7,
+      marginHorizontal: 20,
+      shadowColor: LILA,
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.18,
+      shadowRadius: 8,
+      elevation: 4,
+    },
+    buttonText: {
+      color: BLANCO,
+      fontWeight: 'bold',
+      fontSize: 16,
+      letterSpacing: 0.5,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0,0,0,0.4)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: BLANCO,
+      borderRadius: 18,
+      padding: 24,
+      width: '92%',
+      shadowColor: LILA,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.12,
+      shadowRadius: 10,
+      elevation: 6,
+    },
+    tableHeader: {
+      flexDirection: 'row',
+      borderBottomWidth: 1,
+      borderColor: LILA_CLARO,
+      paddingBottom: 4,
+      marginTop: 8,
+    },
+    th: {
+      flex: 1,
+      fontWeight: 'bold',
+      color: LILA,
+      fontSize: 14,
+    },
+    tableRow: {
+      flexDirection: 'row',
+      paddingVertical: 4,
+      borderBottomWidth: 0.5,
+      borderColor: GRIS,
+    },
+    td: {
+      flex: 1,
+      fontSize: 13,
+      color: TEXTO,
+    },
+    smallButton: {
+      backgroundColor: LILA,
+      paddingVertical: 4,
+      paddingHorizontal: 12,
+      borderRadius: 8,
+      marginLeft: 8,
+      shadowColor: LILA,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.12,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+  });
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Panel del Feligres</Text>
@@ -207,21 +334,3 @@ export default function FeligresScreen({ route, navigation }) {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flexGrow: 1, padding: 20, alignItems: 'center' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 16 },
-  section: { marginBottom: 24, width: '100%' },
-  subtitle: { fontWeight: 'bold', fontSize: 18, marginBottom: 8 },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, marginBottom: 12 },
-  button: { backgroundColor: '#4B9CD3', padding: 14, borderRadius: 8, alignItems: 'center', marginVertical: 6 },
-  buttonText: { color: '#fff', fontWeight: 'bold' },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center' },
-  modalContent: { backgroundColor: '#fff', borderRadius: 10, padding: 20, width: '90%' },
-  // Nuevos estilos para la tabla
-  tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderColor: '#ccc', paddingBottom: 4, marginTop: 8 },
-  th: { flex: 1, fontWeight: 'bold', color: '#4B9CD3', fontSize: 14 },
-  tableRow: { flexDirection: 'row', paddingVertical: 4, borderBottomWidth: 0.5, borderColor: '#eee' },
-  td: { flex: 1, fontSize: 13, color: '#333' },
-  smallButton: { backgroundColor: '#4B9CD3', paddingVertical: 4, paddingHorizontal: 10, borderRadius: 6, marginLeft: 8 },
-});

@@ -79,6 +79,91 @@ export default function DesactivarUsuarioScreen() {
     );
   };
 
+  const LILA = '#A084E8';
+  const LILA_OSCURO = '#6741D9';
+  const LILA_CLARO = '#F3F0FF';
+  const TEXTO = '#2a2a2a';
+  const GRIS = '#e0e7f0';
+  const BLANCO = '#fff';
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: LILA_CLARO,
+      padding: 0,
+      alignItems: 'stretch',
+      paddingBottom: 30,
+    },
+    title: {
+      fontSize: 26,
+      fontWeight: 'bold',
+      marginBottom: 18,
+      color: LILA_OSCURO,
+      textAlign: 'center',
+      marginTop: 32,
+      letterSpacing: 0.5,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: GRIS,
+      borderRadius: 12,
+      padding: 14,
+      marginHorizontal: 20,
+      marginBottom: 18,
+      backgroundColor: LILA_CLARO,
+      color: TEXTO,
+      fontSize: 16,
+    },
+    usuarioItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingVertical: 14,
+      paddingHorizontal: 20,
+      backgroundColor: BLANCO,
+      borderRadius: 16,
+      marginHorizontal: 16,
+      marginBottom: 12,
+      shadowColor: LILA,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.10,
+      shadowRadius: 8,
+      elevation: 2,
+    },
+    usuarioText: {
+      color: TEXTO,
+      fontSize: 16,
+      fontWeight: '500',
+    },
+    desactivarBtn: {
+      backgroundColor: '#d9534f',
+      paddingVertical: 8,
+      paddingHorizontal: 18,
+      borderRadius: 8,
+      marginLeft: 8,
+      shadowColor: '#d9534f',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.12,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    activarBtn: {
+      backgroundColor: '#5cb85c',
+      paddingVertical: 8,
+      paddingHorizontal: 18,
+      borderRadius: 8,
+      marginLeft: 8,
+      shadowColor: '#5cb85c',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.12,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    flatList: {
+      paddingBottom: 30,
+    },
+  });
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Activar/Desactivar Usuario</Text>
@@ -93,7 +178,7 @@ export default function DesactivarUsuarioScreen() {
         keyExtractor={item => item.id_usu}
         renderItem={({ item }) => (
           <View style={styles.usuarioItem}>
-            <Text>
+            <Text style={styles.usuarioText}>
               {item.id_usu} - {item.nom_usu} {item.ape_usu} {item.activo_usu === false ? '(Inactivo)' : ''}
             </Text>
             {item.activo_usu === false ? (
@@ -113,16 +198,8 @@ export default function DesactivarUsuarioScreen() {
             )}
           </View>
         )}
+        contentContainerStyle={styles.flatList}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 16 },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, marginBottom: 12 },
-  usuarioItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, borderBottomWidth: 1, borderColor: '#eee' },
-  desactivarBtn: { backgroundColor: '#d9534f', padding: 8, borderRadius: 6 },
-  activarBtn: { backgroundColor: '#5cb85c', padding: 8, borderRadius: 6 }
-});

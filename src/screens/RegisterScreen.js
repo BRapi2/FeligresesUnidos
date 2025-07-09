@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { registrarUsuario } from '../API/usuarios'; //NO TOCAR DEJALO ASI
+import { obtenerIglesias } from '../API/iglesias';
+import { Picker } from '@react-native-picker/picker';
 
 export default function RegisterScreen({ navigation }) {
   const [dni, setDni] = useState('');
@@ -11,7 +13,18 @@ export default function RegisterScreen({ navigation }) {
   const [emailPrincipal, setEmailPrincipal] = useState('');
   const [password, setPassword] = useState('');
   const [iglesiaId, setIglesiaId] = useState('');
-  const [rol, setRol] = useState('feligres');
+  const rol = 'feligres';
+  const [iglesias, setIglesias] = useState([]);
+  const [loadingIglesias, setLoadingIglesias] = useState(true);
+
+  React.useEffect(() => {
+    obtenerIglesias().then(({ data, error }) => {
+      if (!error && data) {
+        setIglesias(data);
+      }
+      setLoadingIglesias(false);
+    });
+  }, []);
 
   const handleRegister = async () => {
     // Validaciones básicas
@@ -62,8 +75,28 @@ export default function RegisterScreen({ navigation }) {
       <TextInput style={styles.input} placeholder="Correo electrónico" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
       <TextInput style={styles.input} placeholder="Correo principal (opcional)" value={emailPrincipal} onChangeText={setEmailPrincipal} keyboardType="email-address" autoCapitalize="none" />
       <TextInput style={styles.input} placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
-      <TextInput style={styles.input} placeholder="ID Iglesia (opcional)" value={iglesiaId} onChangeText={setIglesiaId} />
-      <TextInput style={styles.input} placeholder="Rol (feligres, tesorero, pastor, admin)" value={rol} onChangeText={setRol} />
+      {/* Picker para iglesia */}
+      <View style={{ marginBottom: 18, borderRadius: 12, overflow: 'hidden', backgroundColor: LILA_CLARO, borderWidth: 1, borderColor: GRIS }}>
+        {loadingIglesias ? (
+          <Text style={{ padding: 12, color: '#888' }}>Cargando iglesias...</Text>
+        ) : (
+          <Picker
+            selectedValue={iglesiaId}
+            onValueChange={setIglesiaId}
+            style={{ color: TEXTO, backgroundColor: 'transparent' }}
+          >
+            <Picker.Item label="Selecciona tu iglesia" value="" />
+            {iglesias.map(ig => (
+              <Picker.Item
+                key={ig.id_il}
+                label={`${ig.anexo_il} - ${ig.distritos?.nombre_dis || ''}`}
+                value={ig.id_il}
+              />
+            ))}
+          </Picker>
+        )}
+      </View>
+      {/* El campo de rol ya no se muestra ni se puede editar */}
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
@@ -74,11 +107,63 @@ export default function RegisterScreen({ navigation }) {
   );
 }
 
+const LILA = '#A084E8';
+const LILA_OSCURO = '#6741D9';
+const LILA_CLARO = '#F3F0FF';
+const TEXTO = '#2a2a2a';
+const GRIS = '#e0e7f0';
+const BLANCO = '#fff';
+
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, justifyContent: 'center', padding: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, marginBottom: 16 },
-  button: { backgroundColor: '#4B9CD3', padding: 14, borderRadius: 8, alignItems: 'center' },
-  buttonText: { color: '#fff', fontWeight: 'bold' },
-  link: { color: '#4B9CD3', marginTop: 16, textAlign: 'center' },
+  container: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: LILA_CLARO,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginBottom: 28,
+    textAlign: 'center',
+    color: LILA_OSCURO,
+    letterSpacing: 0.5,
+    marginTop: 32,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: GRIS,
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 18,
+    backgroundColor: LILA_CLARO,
+    color: TEXTO,
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: LILA,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 8,
+    shadowColor: LILA,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  buttonText: {
+    color: BLANCO,
+    fontWeight: 'bold',
+    fontSize: 16,
+    letterSpacing: 0.5,
+  },
+  link: {
+    color: LILA,
+    marginTop: 18,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 15,
+    letterSpacing: 0.2,
+  },
 });
